@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "nextjs-booking",
+  "private_key_id": "23c0fc04417cc98f37f3b01db752501cc2d8fda3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0kkHVqjszuXzt\nFC7gf8IqNuo8VkhtrOJVj35wiM7X820u5TV2+B66qwqVN96+ZbCQCG0PW8tUMC4E\nSpoTHcNbwhvD1nR0RMuwlWJ55PGtVRB2yaTX9/wokCF0EoCSCEK0WVEYGsky3dOb\n4hTE/Oe/c0RFHftamqkjs8ZRd5lzi24drOy5AEg4D8JYm8Srq9TqTu2kzG/dzZEe\n12wNlWSVlMsWod1xV+l4yN/AFB5sgAB5biCYVJT64/amczn3oshg6R0cno6yldPo\nSETkhZOc0OeZYfwOLZ0yzwRMSdlC2BHLUe5tq/2/GNnK6heM4cYuPG0W8cKPZ+Za\n7DDcq6bnAgMBAAECggEAC1qc8stAQLmGPj6uzzqeogU6R5lMoZTQKygZf7L31UKp\nrVwH4hdU5fuQ7/QHjfpFQVvo8PZz0QiHLt7lVD64BMzY7mtNfu1qegvSmYPd9xOq\nXtsWrJEbv7iHBKOQhl4oROskJbtdcP+GFD8Be6dusljpmdz6QTwIrEWGuqL7Y5/t\njFPWH0vaIfkggb1zJycYny/u7PYakdQkwcsGTH1F7NXaZVtGEH//J4LQ+dojBi4z\nIFZft+CZMLB8YE5VlZxzLmE08Mg1FU6gBPs9no5UqW2IkunFPm8PoH7ygqIQ8U3E\nq3NWjzut/a7LjHOUW+94MmQlQdqUr5hV922mAwgVMQKBgQDhWIN9T7KpxoaadrfW\nY5e+YHXmS0wi85utlM599sXYGcjvs4lwYvk//CAsVyov5+XCqGidkX2G2ICGOkif\nycQJtwKdSLCfLYVmxK8fnwomwzKED0iyjL1NwRgqiPdwITnDF8UsEVMGLfedDjoy\nhCYlUcPWyUw3tAk49TOxrgA8VwKBgQDNIoJmIuifAMv7JscKKyepGdX/lJQi9w0w\ndlMETB5TlQrjMPYwyjIpa07EiPkJDlY30bxmR3BkZTuKoXx6MGTxsr/j9gal/EwI\nuxHi7QrSzJTVAtW33Yx4GbOZYKJb1at6rnSKdKTDq+B64EvolaZSewUHSPdl11c/\n8LbtPkxP8QKBgQCWfZ06d5oShZFo4HW/SD2TlynFhW2wPc4uqx0HxGC2A+pMIjNc\nCcz5LTBzTDbRTWYEjKFo8TvKbRXQDmZnx8AS2NR3I49IjobzbdCiJn0KC/vVc7uR\n+imGHrk71sKgcJ/5qQs1ddBjZRljGphFGjm7XJKUA1TSMnqiPiaqt1BS+wKBgQC6\ncF7rzVZ3DRZXkYrdZxOI0X555+QrUzadkS0qfrQhaxiWHG3lMiAdHPZeEc+lt24N\nFYaRvuQbmxZejR7BPzK/qaJV4clxGrlQRhWflal8pYuvfgAYODfvAA0HnZhytuQ/\ngEdTf2gwnwpLI4haP4kG9eBAGsUfvnQCHRlkznY1QQKBgDXWWHuxbBcLXNJ+G8jQ\nyzw16CC3AhUHPDMgTak6FeeYm3gsBeuH0h8LBg3FC8+txFUs/VEt5y0sqLzbd+ht\nZGPQ8wXP2JFSCGb5FBwB8TgfNSaOqrxIkDP+UwiB5YgGkeM83F0mlZwbJ09wsQ59\nLH3qda44NHxHZTNeY6BifAX4\n-----END PRIVATE KEY-----\n",
+  "client_email": "nextjs-booking@nextjs-booking.iam.gserviceaccount.com",
+  "client_id": "113462318751857970197",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nextjs-booking%40nextjs-booking.iam.gserviceaccount.com"
+}
