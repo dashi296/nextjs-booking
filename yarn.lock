@@ -1425,6 +1425,11 @@ react-dom@18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-google-calendar-api@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-google-calendar-api/-/react-google-calendar-api-2.0.3.tgz#c41c84c55578de1e267579f6d7b4857ff686f773"
+  integrity sha512-klmxKuv5roQfdaf4T9Tzv501DnLnAyuvCCFtd886BonGPufRXChznbIZA4cfFoI2bDNXQJt3P4ajMoErXqWYlA==
+
 react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
