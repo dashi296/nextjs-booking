@@ -15,10 +15,12 @@ const handler = async (
   res: NextApiResponse
 ) => {
 
+  if(req.method !== 'GET') {
+    return res.status(400)
+  }
+
   const { year, month } = req.query as Query
-  console.warn('year-month: ', `${year}-${month}`)
   const day = dayjs(new Date(+year, +month, 1)) || dayjs()
-  console.warn('day: ', day)
   
   const authorizeResult = await jwt.authorize()
   if(!authorizeResult.access_token) {

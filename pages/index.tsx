@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
@@ -13,6 +13,24 @@ const fetcher = ({ year, month }: { year: number, month: number }) => {
   const query = new URLSearchParams(params)
   return fetch(`/api/events?${query}`).then(res => res.json())
 }
+
+const book = async ({
+  startDate,
+  endDate,
+}: {
+  startDate: Dayjs
+  endDate: Dayjs
+}) => {
+  const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
+  const body = JSON.stringify({
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString()
+  })
+  await fetch('/api/book', { method: 'POST', headers, body }).catch(err => console.error(err))
+} 
 
 const Home: NextPage = () => {
   const [baseDate, setBaseDate] = useState(dayjs())
@@ -29,6 +47,7 @@ const Home: NextPage = () => {
         baseDate={baseDate}
         events={events}
       />
+      <button onClick={() => book({ startDate: dayjs().add(6, 'day'), endDate: dayjs().add(8, 'day')})}>予約</button>
     </div>
   )
 }
