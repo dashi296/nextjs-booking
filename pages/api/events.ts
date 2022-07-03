@@ -5,10 +5,20 @@ import dayjs from 'dayjs'
 
 const CALENDAR_ID = process.env.CALENDAR_ID
 
+type Query = {
+  year: string
+  month: string
+}
+
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
+
+  const { year, month } = req.query as Query
+  console.warn('year-month: ', `${year}-${month}`)
+  const day = dayjs(new Date(+year, +month, 1)) || dayjs()
+  console.warn('day: ', day)
   
   const authorizeResult = await jwt.authorize()
   if(!authorizeResult.access_token) {
@@ -18,10 +28,8 @@ const handler = async (
 
   console.warn('CALENDAR_ID: ', CALENDAR_ID)
 
-  const timeMin = dayjs().startOf('month').toISOString()
-  const timeMax = dayjs().endOf('month').toISOString()
-  console.warn('timeMin: ', timeMin)
-  console.warn('timeMax: ', timeMax)
+  const timeMin = day.startOf('month').toISOString()
+  const timeMax = day.endOf('month').toISOString()
   const results = await calendar.events.list({
     auth: jwt,
     calendarId: CALENDAR_ID,

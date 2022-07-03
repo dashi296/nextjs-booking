@@ -1,12 +1,22 @@
+import dayjs from 'dayjs'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useState } from 'react'
 import useSWR from 'swr'
-import CustomCalendar from '../components/CustomCalendar'
+import ReactCustomCalendar from '../components/calendar/CustomCalendar'
 
-const fetcher = () => fetch('/api/events').then(res => res.json())
+const fetcher = ({ year, month }: { year: number, month: number }) => {
+  const params = {
+    year: `${year}`,
+    month: `${month}`
+  }
+  const query = new URLSearchParams(params)
+  return fetch(`/api/events?${query}`).then(res => res.json())
+}
 
 const Home: NextPage = () => {
-  const { data: events, error } = useSWR(`/api/events`, fetcher)
+  const [baseDate, setBaseDate] = useState(dayjs())
+  const { data: events = [], error } = useSWR(`/api/events?year=${baseDate.year()}&month=${baseDate.month()}`, () => fetcher({ year: baseDate.year(), month: baseDate.month() }))
   return (
     <div>
       <Head>
@@ -15,7 +25,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <CustomCalendar events={events}/>
+      <ReactCustomCalendar
+        baseDate={baseDate}
+        events={events}
+      />
     </div>
   )
 }
