@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import useSWR from "swr";
+import BookForm from "../components/BookForm";
 import ReactCustomCalendar from "../components/calendar/CustomCalendar";
 import CustomButton from "../components/common/CustomButton";
 import TopCarousel from "../components/TopCarousel";
@@ -62,6 +63,8 @@ const Home: NextPage = () => {
       >
         予約
       </CustomButton>
+
+      <BookForm events={events} />
     </div>
   );
 };
