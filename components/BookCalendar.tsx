@@ -44,7 +44,13 @@ const BookCalendar = ({
   const getTileDisabled = (props: CalendarTileProperties) => {
     const { view } = props;
     const today = dayjs();
-    const date = dayjs(props.date);
+    const getCheckInDateTime = (date: Date) =>
+      dayjs(date)
+        .set("hour", 15)
+        .set("minute", 0)
+        .set("second", 0)
+        .set("millisecond", 0);
+    const date = getCheckInDateTime(props.date);
     if (view === "year" && date.isBefore(today, "m")) {
       return true;
     }
@@ -53,7 +59,7 @@ const BookCalendar = ({
       return true;
     }
     const disabled = events.some((event) =>
-      dayjs(date).isBetween(event.start, event.end, "day", "[]")
+      dayjs(date).isBetween(event.start, event.end, "h", "[]")
     );
     return disabled;
   };

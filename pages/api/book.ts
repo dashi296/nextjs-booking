@@ -67,7 +67,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const authorizeResult = await jwt.authorize();
   if (!authorizeResult.access_token) {
     res.status(401).json({
-      message: "Authorized Error",
+      message: "Authorize Error",
       error: 401,
       data,
     });
