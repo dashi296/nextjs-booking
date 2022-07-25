@@ -1,9 +1,11 @@
 import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 import Calendar, {
   CalendarProps,
   CalendarTileProperties,
 } from "react-calendar";
 import { CalendarEvent } from "../types/CalendarEvent";
+dayjs.extend(isBetween);
 
 type Props = CalendarProps & {
   events: CalendarEvent[];
@@ -11,8 +13,8 @@ type Props = CalendarProps & {
   numOfNight: number;
 };
 
-const BookTile = ({ date }: { date: Date }) => {
-  return <div className="bg-primary">{dayjs(date).date()}</div>;
+const BookTile = () => {
+  return <div className="bg-primary">予約</div>;
 };
 
 const BookCalendar = ({
@@ -21,9 +23,11 @@ const BookCalendar = ({
   numOfNight,
   ...calendarProps
 }: Props) => {
-  console.warn("checkInDate: ", checkInDate);
-  console.warn("numOfNight: ", numOfNight);
-  const getTileContent = ({ date }: CalendarTileProperties) => {
+  const getTileContent = ({ date, view }: CalendarTileProperties) => {
+    if (view !== "month") {
+      return null;
+    }
+
     if (
       dayjs(date).isBetween(
         checkInDate,
@@ -32,13 +36,19 @@ const BookCalendar = ({
         "[]"
       )
     ) {
-      return <BookTile date={date} />;
+      return <BookTile />;
     }
     return null;
   };
 
-  const getTileDisabled = ({ date }: CalendarTileProperties) => {
+  const getTileDisabled = (props: CalendarTileProperties) => {
+    const { view } = props;
     const today = dayjs();
+    const date = dayjs(props.date);
+    if (view === "year" && date.isBefore(today, "m")) {
+      return true;
+    }
+
     if (today.isAfter(date, "d")) {
       return true;
     }
@@ -50,6 +60,8 @@ const BookCalendar = ({
   return (
     <Calendar
       {...calendarProps}
+      maxDetail="month"
+      minDetail="year"
       tileDisabled={getTileDisabled}
       tileContent={getTileContent}
     />

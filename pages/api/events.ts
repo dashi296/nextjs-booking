@@ -24,8 +24,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  console.warn("CALENDAR_ID: ", CALENDAR_ID);
-
   const timeMin = day.startOf("month").toISOString();
   const timeMax = day.endOf("month").toISOString();
   const results = await calendar.events.list({
@@ -44,8 +42,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       end: end?.dateTime,
     };
   });
-
-  console.warn("events: ", events);
 
   res.status(200).json(events);
 };

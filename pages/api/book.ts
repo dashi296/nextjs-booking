@@ -1,29 +1,32 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { jwt, calendar } from "../../libs/google-calendar-api";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 const CALENDAR_ID = process.env.CALENDAR_ID;
 
 const generateEvent = ({
-  startDate,
-  endDate,
+  checkInDate,
+  checkOutDate,
+  description,
 }: {
-  startDate: string;
-  endDate: string;
+  checkInDate: string;
+  checkOutDate: string;
+  description: string;
 }) => {
   return {
     summary: "予約",
     location: "",
-    description: "",
+    description,
     start: {
-      dateTime: dayjs(startDate).set("h", 10).set("m", 0).toISOString(),
+      dateTime: dayjs(checkInDate).set("h", 15).set("m", 0).toISOString(),
       timeZone: "Asia/Tokyo",
     },
     end: {
-      dateTime: dayjs(endDate).set("h", 11).set("m", 0).toISOString(),
+      dateTime: dayjs(checkOutDate).set("h", 10).set("m", 0).toISOString(),
       timeZone: "Asia/Tokyo",
     },
+    color: 2,
     attendees: [],
     reminders: {
       useDefault: false,
@@ -36,35 +39,43 @@ const generateEvent = ({
 };
 
 type Query = {
-  startDate: string;
-  endDate: string;
+  checkInDate: string;
+  checkOutDate: string;
+  description: string;
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.warn("req: ", req);
   if (req.method !== "POST") {
-    return res.status(400);
-  }
-
-  const { startDate, endDate } = req.body as Query;
-
-  console.warn("startDate: ", startDate);
-  console.warn("endDate: ", endDate);
-
-  const event = generateEvent({ startDate, endDate });
-
-  const authorizeResult = await jwt.authorize();
-  if (!authorizeResult.access_token) {
     res.status(400);
     return;
   }
 
-  console.warn("CALENDAR_ID: ", CALENDAR_ID);
+  const { checkInDate, checkOutDate, description } = req.body as Query;
+  if (!checkInDate || !checkOutDate) {
+    res.status(400);
+    return;
+  }
+
+  console.warn("a");
+
+  const event = generateEvent({ checkInDate, checkOutDate, description });
+
+  const authorizeResult = await jwt.authorize();
+  if (!authorizeResult.access_token) {
+    res.status(401);
+    return;
+  }
+
+  console.warn("b");
 
   const results = await calendar.events.insert({
     auth: jwt,
     calendarId: CALENDAR_ID,
     requestBody: event,
   });
+
+  console.warn("c");
 
   res.status(200).json(results);
 };

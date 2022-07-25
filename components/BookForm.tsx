@@ -9,6 +9,15 @@ import "react-calendar/dist/Calendar.css";
 
 type Props = {
   events: CalendarEvent[];
+  onSubmit: ({
+    checkInDate,
+    numOfNight,
+    description,
+  }: {
+    checkInDate: Date;
+    numOfNight: number;
+    description: string;
+  }) => void;
 };
 
 const schema = object({
@@ -16,18 +25,16 @@ const schema = object({
   numOfNight: number().positive().integer().required(),
 }).required();
 
-const defaultValues = {
-  checkInDate: dayjs().add(1, "d").toDate(),
-  numOfNight: 1,
-};
+const BookForm = ({ events, onSubmit }: Props) => {
+  const defaultValues = {
+    checkInDate: dayjs().add(1, "d").toDate(),
+    numOfNight: 1,
+  };
 
-const BookForm = ({ events }: Props) => {
   const {
     register,
     control,
     handleSubmit,
-    getValues,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -36,11 +43,13 @@ const BookForm = ({ events }: Props) => {
   const checkInDate = useWatch({ control, name: "checkInDate" });
   const numOfNight = useWatch({ control, name: "numOfNight" });
 
-  const onSubmit = handleSubmit((data) => {
+  const submit = handleSubmit((data) => {
     console.warn(data);
+    const description = "test";
+    onSubmit({ ...data, description });
   });
   return (
-    <form className="flex flex-col" onSubmit={onSubmit}>
+    <form className="flex flex-col" onSubmit={submit}>
       <Controller
         control={control}
         name="checkInDate"

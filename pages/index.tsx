@@ -18,19 +18,24 @@ const fetcher = ({ year, month }: { year: number; month: number }) => {
 };
 
 const book = async ({
-  startDate,
-  endDate,
+  checkInDate,
+  numOfNight,
+  description,
 }: {
-  startDate: Dayjs;
-  endDate: Dayjs;
+  checkInDate: Date;
+  numOfNight: number;
+  description: string;
 }) => {
   const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
   };
+
+  const checkOutDate = dayjs(checkInDate).add(numOfNight, "d");
   const body = JSON.stringify({
-    startDate: startDate.toISOString(),
-    endDate: endDate.toISOString(),
+    checkInDate: checkInDate.toISOString(),
+    checkOutDate: checkOutDate.toISOString(),
+    description,
   });
   await fetch("/api/book", { method: "POST", headers, body }).catch((err) =>
     console.error(err)
@@ -52,19 +57,7 @@ const Home: NextPage = () => {
       </Head>
       <TopCarousel />
 
-      <ReactCustomCalendar baseDate={baseDate} events={events} />
-      <CustomButton
-        onClick={() =>
-          book({
-            startDate: dayjs().add(6, "day"),
-            endDate: dayjs().add(8, "day"),
-          })
-        }
-      >
-        予約
-      </CustomButton>
-
-      <BookForm events={events} />
+      <BookForm events={events} onSubmit={book} />
     </div>
   );
 };
