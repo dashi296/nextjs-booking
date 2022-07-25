@@ -51,31 +51,34 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const { checkInDate, checkOutDate, description } = req.body as Query;
+  const data = req.body as Query;
+  const { checkInDate, checkOutDate, description } = data;
   if (!checkInDate || !checkOutDate) {
-    res.status(400);
+    res.status(400).json({
+      message: "Bad Request",
+      error: 400,
+      data,
+    });
     return;
   }
-
-  console.warn("a");
 
   const event = generateEvent({ checkInDate, checkOutDate, description });
 
   const authorizeResult = await jwt.authorize();
   if (!authorizeResult.access_token) {
-    res.status(401);
+    res.status(401).json({
+      message: "Authorized Error",
+      error: 401,
+      data,
+    });
     return;
   }
-
-  console.warn("b");
 
   const results = await calendar.events.insert({
     auth: jwt,
     calendarId: CALENDAR_ID,
     requestBody: event,
   });
-
-  console.warn("c");
 
   res.status(200).json(results);
 };
