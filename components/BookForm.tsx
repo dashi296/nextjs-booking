@@ -6,6 +6,8 @@ import { CalendarEvent } from "../types/CalendarEvent";
 import BookCalendar from "./BookCalendar";
 
 import "react-calendar/dist/Calendar.css";
+import CustomButton from "./common/CustomButton";
+import { Box, TextField } from "@mui/material";
 
 type Props = {
   events: CalendarEvent[];
@@ -49,7 +51,7 @@ const BookForm = ({ events, onSubmit }: Props) => {
     onSubmit({ ...data, description });
   });
   return (
-    <form className="flex flex-col" onSubmit={submit}>
+    <Box component="form" sx={{ display: "flex" }} onSubmit={submit}>
       <Controller
         control={control}
         name="checkInDate"
@@ -64,12 +66,13 @@ const BookForm = ({ events, onSubmit }: Props) => {
           />
         )}
       />
-      <label>チェックイン日</label>
-      <div>{dayjs(checkInDate).format("YYYY/MM/DD")}</div>
-      <label>宿泊数</label>
-      <input {...register("numOfNight")} />
-      <button type="submit">予約</button>
-    </form>
+      <Box>
+        <label>チェックイン日</label>
+        <div>{dayjs(checkInDate).format("YYYY/MM/DD")}</div>
+        <TextField label="宿泊数" {...register("numOfNight")} />
+        <CustomButton type="submit">予約</CustomButton>
+      </Box>
+    </Box>
   );
 };
 
