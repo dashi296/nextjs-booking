@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { object, string, number, date, array } from "yup";
 import BookCalendar from "./BookCalendar";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useState } from "react";
 import useSWR from "swr";
 import Dialog from "@mui/material/Dialog";
@@ -64,6 +64,8 @@ const schema = object({
 }).required();
 
 const BookSection = () => {
+  const theme = useTheme();
+  const isMdOrOver = useMediaQuery(theme.breakpoints.up("sm"));
   const [range, setRange] = useState<DateRange>([null, null]);
   const today = dayjs();
   const { data: events, error } = useSWR(
@@ -71,7 +73,6 @@ const BookSection = () => {
     () => fetcher({ year: today.year(), month: today.month() })
   );
 
-  console.warn("events: ", events);
   const [openFormDialog, setOpenFormDialog] = useState(false);
 
   return (
@@ -81,7 +82,7 @@ const BookSection = () => {
         value={range}
         allowPartialRange
         selectRange
-        showDoubleView
+        showDoubleView={isMdOrOver}
         onChange={(values: [Date] | [Date, Date]) => {
           const newRange: DateRange =
             values.length === 1 ? [values[0], null] : values;
