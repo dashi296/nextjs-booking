@@ -1,3 +1,4 @@
+import { Box, Skeleton } from "@mui/material";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import Calendar, {
@@ -8,34 +9,33 @@ import { CalendarEvent } from "../types/CalendarEvent";
 dayjs.extend(isBetween);
 
 type Props = CalendarProps & {
-  events: CalendarEvent[];
-  checkInDate: Date;
-  numOfNight: number;
+  events?: CalendarEvent[];
 };
 
 const BookTile = () => {
-  return <div className="bg-primary">予約</div>;
+  return <div className="bg-primary" />;
 };
 
-const BookCalendar = ({
-  events,
-  checkInDate,
-  numOfNight,
-  ...calendarProps
-}: Props) => {
+const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
+  if (events === undefined) {
+    return (
+      <Box>
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          width={350}
+          height={272}
+        />
+      </Box>
+    );
+  }
+  const [checkInDate, checkOutDate] = value as [Date | null, Date | null];
   const getTileContent = ({ date, view }: CalendarTileProperties) => {
     if (view !== "month") {
       return null;
     }
 
-    if (
-      dayjs(date).isBetween(
-        checkInDate,
-        dayjs(checkInDate).add(numOfNight, "d"),
-        "d",
-        "[]"
-      )
-    ) {
+    if (dayjs(date).isBetween(checkInDate, dayjs(checkOutDate), "d", "[]")) {
       return <BookTile />;
     }
     return null;
@@ -63,11 +63,13 @@ const BookCalendar = ({
     );
     return disabled;
   };
+
   return (
     <Calendar
       {...calendarProps}
       maxDetail="month"
       minDetail="year"
+      locale="ja-JP"
       tileDisabled={getTileDisabled}
       tileContent={getTileContent}
     />

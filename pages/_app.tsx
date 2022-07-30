@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "../styles/CustomCalendar.css";
 import type { AppProps } from "next/app";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CustomHeader from "../components/common/CustomHeader";

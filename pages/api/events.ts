@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 
 const CALENDAR_ID = process.env.CALENDAR_ID;
 
+// TODO: とりあえず3ヶ月分の予定を返す
 type Query = {
   year: string;
   month: string;
@@ -25,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const timeMin = day.startOf("month").toISOString();
-  const timeMax = day.endOf("month").toISOString();
+  const timeMax = day.add(3, "month").endOf("month").toISOString();
   const results = await calendar.events.list({
     auth: jwt,
     calendarId: CALENDAR_ID,
