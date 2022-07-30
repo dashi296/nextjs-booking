@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import { object, string, number, date, array } from "yup";
 import BookCalendar from "./BookCalendar";
-import { Box, useMediaQuery, useTheme } from "@mui/material";
-import { useState } from "react";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -74,9 +74,29 @@ const BookSection = () => {
   );
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
+  const hasCheckInDate = range[0] !== null;
+  const hasCheckOutDate = range[1] !== null;
+
+  const onCloseFormDialog = () => {
+    console.warn("onClose");
+    setOpenFormDialog(false);
+    setRange([null, null]);
+  };
+
+  useEffect(() => {
+    console.warn("range: ", range);
+  }, [range]);
 
   return (
     <Box>
+      <Typography variant="body2">
+        {!hasCheckInDate &&
+          !hasCheckOutDate &&
+          "チェックイン日を選択してください"}
+        {hasCheckInDate &&
+          !hasCheckOutDate &&
+          "チェックアウト日を選択してください"}
+      </Typography>
       <BookCalendar
         events={events}
         value={range}
@@ -90,10 +110,9 @@ const BookSection = () => {
           if (values.length === 2) {
             setOpenFormDialog(true);
           }
-          console.warn("values: ", values);
         }}
       />
-      <Dialog open={openFormDialog} onClose={() => setOpenFormDialog(false)}>
+      <Dialog open={openFormDialog} onClose={onCloseFormDialog}>
         <DialogTitle>予約</DialogTitle>
         <DialogContent>
           <BookForm range={range} />

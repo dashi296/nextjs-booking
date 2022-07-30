@@ -1,10 +1,12 @@
 import { Box, Skeleton } from "@mui/material";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import { useDebugValue } from "react";
 import Calendar, {
   CalendarProps,
   CalendarTileProperties,
 } from "react-calendar";
+import { getCheckInDateTime } from "../libs/dayjs";
 import { CalendarEvent } from "../types/CalendarEvent";
 dayjs.extend(isBetween);
 
@@ -41,32 +43,62 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
     return null;
   };
 
+  const getMaxCheckOutDate = () => {
+    return events.reduce((prev, curr) => {
+      const eventStartAt = dayjs(curr.start);
+      if (eventStartAt.isBefore(checkInDate)) {
+        return prev;
+      }
+      if (prev === null || prev.isAfter(eventStartAt)) {
+        return eventStartAt;
+      }
+      return prev;
+    }, null as Dayjs | null);
+  };
+
   const getTileDisabled = (props: CalendarTileProperties) => {
     const { view } = props;
     const today = dayjs();
-    const getCheckInDateTime = (date: Date) =>
-      dayjs(date)
-        .set("hour", 15)
-        .set("minute", 0)
-        .set("second", 0)
-        .set("millisecond", 0);
-    const date = getCheckInDateTime(props.date);
-    if (view === "year" && date.isBefore(today, "m")) {
+    const tileDate = getCheckInDateTime(props.date);
+    if (view === "year" && tileDate.isBefore(today, "m")) {
       return true;
     }
 
-    if (today.isAfter(date, "d")) {
-      return true;
+    if (!checkInDate) {
+      const canCheckIn = () => {
+        // today以前はチェックイン不可
+        if (tileDate.isBefore(today, "d")) {
+          return false;
+        }
+        // 予定がある日はcheckIn不可
+        return !events.some((event) =>
+          dayjs(tileDate).isBetween(event.start, event.end, "h", "[]")
+        );
+      };
+      return !canCheckIn();
     }
-    const disabled = events.some((event) =>
-      dayjs(date).isBetween(event.start, event.end, "h", "[]")
-    );
-    return disabled;
+    const canCheckOut = () => {
+      // チェックイン以前の日付はチェックアウト不可
+      if (tileDate.isBefore(checkInDate)) {
+        return false;
+      }
+      // チェックイン日以降の直近の予定の日付を取得
+      const maxCheckOutDate = getMaxCheckOutDate();
+      // 上記日付がない場合、チェックイン日以降はいつでもチェックアウト可
+      if (!maxCheckOutDate) {
+        return true;
+      }
+      // 上記日付以前はチェックアウト可能
+      return tileDate.isBefore(maxCheckOutDate);
+    };
+
+    return !canCheckOut();
   };
 
   return (
     <Calendar
       {...calendarProps}
+      value={value}
       maxDetail="month"
       minDetail="year"
       locale="ja-JP"
