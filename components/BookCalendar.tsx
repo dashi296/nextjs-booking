@@ -30,6 +30,7 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
       </Box>
     );
   }
+  const today = dayjs();
   const [checkInDate, checkOutDate] = value as [Date | null, Date | null];
   const getTileContent = ({ date, view }: CalendarTileProperties) => {
     if (view !== "month") {
@@ -57,7 +58,6 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
 
   const getTileDisabled = (props: CalendarTileProperties) => {
     const { view } = props;
-    const today = dayjs();
     const tileDate = getCheckInDateTime(props.date);
     if (view === "year" && tileDate.isBefore(today, "m")) {
       return true;
@@ -100,6 +100,7 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
       value={value}
       maxDetail="month"
       minDetail="year"
+      minDate={today.toDate()}
       locale="ja-JP"
       tileDisabled={getTileDisabled}
       tileContent={getTileContent}

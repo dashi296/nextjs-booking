@@ -4,8 +4,7 @@ import { object, string, number, date, array } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CustomButton from "./common/CustomButton";
 import { Box, TextField } from "@mui/material";
-
-type DateRange = [Date | null, Date | null];
+import { DateRange } from "../types/Date";
 
 export type FormInputs = {
   range: DateRange;
