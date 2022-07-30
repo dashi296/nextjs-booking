@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiHandler } from "next";
 import { jwt, calendar } from "../../libs/google-calendar-api";
 import dayjs from "dayjs";
 
@@ -11,7 +11,7 @@ type Query = {
   month: string;
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "GET") {
     return res.status(400);
   }
