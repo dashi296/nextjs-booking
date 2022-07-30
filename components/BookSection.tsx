@@ -83,10 +83,6 @@ const BookSection = () => {
     setRange([null, null]);
   };
 
-  useEffect(() => {
-    console.warn("range: ", range);
-  }, [range]);
-
   return (
     <Box>
       <Typography variant="body2">

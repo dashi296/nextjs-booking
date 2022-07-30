@@ -70,8 +70,8 @@ const BookForm = ({ range }: Props) => {
   const [checkInDate, checkOutDate] = range;
 
   const submit = handleSubmit((data) => {
-    console.warn(data);
-    // book(data);
+    console.log("book: ", data);
+    book(data);
   });
   return (
     <Box component="form" sx={{ p: 2 }} onSubmit={submit}>

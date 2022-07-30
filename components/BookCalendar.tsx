@@ -1,7 +1,6 @@
 import { Box, Skeleton } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import { useDebugValue } from "react";
 import Calendar, {
   CalendarProps,
   CalendarTileProperties,

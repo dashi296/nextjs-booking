@@ -45,7 +45,6 @@ type Query = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.warn("req: ", req);
   if (req.method !== "POST") {
     res.status(400);
     return;
