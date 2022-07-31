@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import CustomButton from "./common/CustomButton";
 import { Box, TextField } from "@mui/material";
 import { DateRange } from "../types/Date";
+import FormSubtitle from "./FormSubtitle";
 
 export type FormInputs = {
   range: DateRange;
@@ -81,11 +82,13 @@ const BookForm = ({ range }: Props) => {
   });
   return (
     <Box component="form" sx={{ p: 2 }} onSubmit={submit}>
-      <Box sx={{ display: "flex", pb: 2 }}>
+      <Box sx={{ pb: 2 }}>
+        <FormSubtitle>宿泊期間</FormSubtitle>
         <TextField label="チェックイン" value={checkInDateValue} disabled />
         <TextField label="チェックアウト" value={checkOutDateValue} disabled />
       </Box>
-      <Box sx={{ display: "flex", pb: 2 }}>
+      <Box sx={{ pb: 2 }}>
+        <FormSubtitle>人数</FormSubtitle>
         <TextField
           label="人数(大人)"
           inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}

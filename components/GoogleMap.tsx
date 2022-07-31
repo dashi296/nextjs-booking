@@ -6,7 +6,8 @@ const GOOGLE_MAP_SRC = process.env.GOOGLE_MAP_SRC;
 const iframeWrapper = css`
   max-width: 800px;
   width: 80vw;
-  height: auto;
+  height: 80vw;
+  max-height: 500px;
 `;
 
 const iframeCss = css`

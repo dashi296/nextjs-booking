@@ -102,6 +102,7 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
       value={value}
       maxDetail="month"
       minDetail="year"
+      formatDay={(_locale, date) => dayjs(date).format("D")}
       minDate={today.toDate()}
       locale="ja-JP"
       tileDisabled={getTileDisabled}
