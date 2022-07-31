@@ -1,6 +1,5 @@
 import { google } from "googleapis";
 import { Credentials } from "../types/Credentials";
-import { Buffer } from "buffer";
 
 const scopes = [
   "https://www.googleapis.com/auth/calendar",
