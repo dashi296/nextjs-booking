@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { Box } from "@mui/material";
 
-const GOOGLE_MAP_SRC = process.env.GOOGLE_MAP_SRC;
+const GOOGLE_MAP_SRC = process.env.NEXT_PUBLIC_GOOGLE_MAP_SRC;
 
 const iframeWrapper = css`
   max-width: 800px;
