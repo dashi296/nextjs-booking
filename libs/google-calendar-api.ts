@@ -20,8 +20,6 @@ const parseKey = (key: string) => {
 
 const credentials = parseKey(GOOGLE_SERVICE_KEY);
 
-console.warn("credentials: ", credentials);
-
 const { client_email, private_key } = credentials;
 
 export const jwt = new google.auth.JWT(
