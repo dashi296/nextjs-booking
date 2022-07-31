@@ -2,6 +2,7 @@
 import type { NextApiHandler } from "next";
 import { jwt, calendar } from "../../libs/google-calendar-api";
 import dayjs from "dayjs";
+import { google } from "googleapis";
 
 const CALENDAR_ID = process.env.CALENDAR_ID;
 
@@ -19,16 +20,9 @@ const handler: NextApiHandler = async (req, res) => {
   const { year, month } = req.query as Query;
   const day = dayjs(new Date(+year, +month, 1)) || dayjs();
 
-  const authorizeResult = await jwt.authorize();
-  if (!authorizeResult.access_token) {
-    res.status(400);
-    return;
-  }
-
   const timeMin = day.startOf("month").toISOString();
   const timeMax = day.add(3, "month").endOf("month").toISOString();
   const results = await calendar.events.list({
-    auth: jwt,
     calendarId: CALENDAR_ID,
     timeMin,
     timeMax,
