@@ -68,6 +68,13 @@ const BookForm = ({ range }: Props) => {
   });
   const [checkInDate, checkOutDate] = range;
 
+  const checkInDateValue = checkInDate
+    ? dayjs(checkInDate).format("YYYY/MM/DD HH:mm")
+    : null;
+  const checkOutDateValue = checkInDate
+    ? dayjs(checkOutDate).format("YYYY/MM/DD HH:mm")
+    : null;
+
   const submit = handleSubmit((data) => {
     console.log("book: ", data);
     book(data);
@@ -75,16 +82,8 @@ const BookForm = ({ range }: Props) => {
   return (
     <Box component="form" sx={{ p: 2 }} onSubmit={submit}>
       <Box sx={{ display: "flex", pb: 2 }}>
-        <TextField
-          label="チェックイン"
-          value={dayjs(checkInDate).format("YYYY/MM/DD")}
-          disabled
-        />
-        <TextField
-          label="チェックアウト"
-          value={dayjs(checkOutDate).format("YYYY/MM/DD")}
-          disabled
-        />
+        <TextField label="チェックイン" value={checkInDateValue} disabled />
+        <TextField label="チェックアウト" value={checkOutDateValue} disabled />
       </Box>
       <Box sx={{ display: "flex", pb: 2 }}>
         <TextField

@@ -11,6 +11,7 @@ import BookForm from "./BookForm";
 import Section from "./Section";
 import { DateRange } from "../types/Date";
 import SectionTitle from "./SectionTitle";
+import { getCheckInDateTime, getCheckOutDateTime } from "../libs/dayjs";
 
 const fetcher = ({ year, month }: { year: number; month: number }) => {
   const params = {
@@ -57,11 +58,16 @@ const BookSection = () => {
         allowPartialRange
         selectRange
         showDoubleView={isMdOrOver}
-        onChange={(values: [Date] | [Date, Date]) => {
+        onChange={(range: [Date] | [Date, Date]) => {
           const newRange: DateRange =
-            values.length === 1 ? [values[0], null] : values;
+            range.length === 1
+              ? [getCheckInDateTime(range[0]).toDate(), null]
+              : [
+                  getCheckInDateTime(range[0]).toDate(),
+                  getCheckOutDateTime(range[1]).toDate(),
+                ];
           setRange(newRange);
-          if (values.length === 2) {
+          if (range.length === 2) {
             setOpenFormDialog(true);
           }
         }}
