@@ -1,20 +1,24 @@
-import { Box, BoxProps } from "@mui/material";
+import { Box, BoxProps, Container, ContainerProps } from "@mui/material";
 import { PropsWithChildren } from "react";
 
-const Section = ({ children, ...boxProps }: PropsWithChildren<BoxProps>) => {
+const Section = ({
+  children,
+  ...containerProps
+}: PropsWithChildren<ContainerProps>) => {
   return (
-    <Box
-      {...boxProps}
+    <Container
+      {...containerProps}
+      maxWidth="xl"
       sx={{
         p: 4,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        ...boxProps.sx,
+        ...containerProps.sx,
       }}
     >
-      {children}
-    </Box>
+      <Box sx={{ p: 0, m: 0, textAlign: "center" }}>{children}</Box>
+    </Container>
   );
 };
 
