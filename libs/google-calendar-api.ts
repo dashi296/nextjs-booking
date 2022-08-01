@@ -14,7 +14,7 @@ const parseKey = (key: string) => {
 
   return {
     ...credentials,
-    private_key: credentials.private_key.replaceAll("\\n", "\n"),
+    private_key: credentials.private_key.replace(/\\n/, "\n"),
   };
 };
 
