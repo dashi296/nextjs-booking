@@ -69,6 +69,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     requestBody: event,
   });
 
+  console.warn("result: ", result);
+
   res.status(200).json(result);
 };
 

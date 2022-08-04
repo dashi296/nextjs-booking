@@ -6,6 +6,10 @@ import CustomButton from "./common/CustomButton";
 import { Box, TextField } from "@mui/material";
 import { DateRange } from "../types/Date";
 import FormSubtitle from "./FormSubtitle";
+import { BooksContext } from "../contexts/Books";
+import { useContext } from "react";
+import { calendar_v3 } from "googleapis";
+import { GaxiosResponse } from "../types/GaxiosResponse";
 
 export type FormInputs = {
   range: DateRange;
@@ -14,7 +18,18 @@ export type FormInputs = {
   description: string;
 };
 
-const book = async ({
+const schema = object({
+  range: array().of(date()).length(2).required(),
+  numOfAdults: number().required(),
+  numOfChildren: number().required(),
+  description: string(),
+}).required();
+
+type Props = {
+  range: DateRange;
+};
+
+const book = ({
   range,
   description,
 }: {
@@ -35,23 +50,13 @@ const book = async ({
     checkOutDate: checkOutDate.toISOString(),
     description,
   });
-  await fetch("/api/book", { method: "POST", headers, body }).catch((err) =>
-    console.error(err)
+  return fetch("/api/book", { method: "POST", headers, body }).then((res) =>
+    res.json()
   );
 };
 
-const schema = object({
-  range: array().of(date()).length(2).required(),
-  numOfAdults: number().required(),
-  numOfChildren: number().required(),
-  description: string(),
-}).required();
-
-type Props = {
-  range: DateRange;
-};
-
 const BookForm = ({ range }: Props) => {
+  const { addBook } = useContext(BooksContext);
   const defaultValues = {
     range,
     numOfAdults: 1,
@@ -76,9 +81,17 @@ const BookForm = ({ range }: Props) => {
     ? dayjs(checkOutDate).format("YYYY/MM/DD HH:mm")
     : null;
 
-  const submit = handleSubmit((data) => {
-    console.log("book: ", data);
-    book(data);
+  const submit = handleSubmit(async (data) => {
+    await book(data)
+      ?.then((res: any) => {
+        const newBook = res.data;
+        if (newBook.id !== undefined) {
+          addBook(newBook.id);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   });
   return (
     <Box component="form" sx={{ p: 2 }} onSubmit={submit}>

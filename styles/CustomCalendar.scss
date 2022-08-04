@@ -83,9 +83,15 @@
   text-align: center;
   line-height: 16px;
   border: 1px solid black;
+  &.booked {
+    background-color: #76baff;
+  }
 }
 .react-calendar__tile:disabled {
   background-color: #f0f0f0;
+  &.booked {
+    background-color: #006edc;
+  }
 }
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
@@ -115,4 +121,8 @@
 }
 .react-calendar--selectRange .react-calendar__tile--hover {
   background-color: #e6e6e6;
+}
+
+.bg-primary {
+  background-color: red;
 }

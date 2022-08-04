@@ -1,10 +1,12 @@
-import { Box, Skeleton } from "@mui/material";
+import { Box, Skeleton, Tooltip } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import { useContext } from "react";
 import Calendar, {
   CalendarProps,
   CalendarTileProperties,
 } from "react-calendar";
+import { BooksContext } from "../contexts/Books";
 import { getCheckInDateTime, getCheckOutDateTime } from "../libs/dayjs";
 import { CalendarEvent } from "../types/CalendarEvent";
 dayjs.extend(isBetween);
@@ -13,11 +15,9 @@ type Props = CalendarProps & {
   events?: CalendarEvent[];
 };
 
-const BookTile = () => {
-  return <div className="bg-primary" />;
-};
-
 const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
+  const { books } = useContext(BooksContext);
+
   if (events === undefined) {
     return (
       <Box>
@@ -30,15 +30,26 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
       </Box>
     );
   }
+
+  const bookEvents = events.filter((event) => books.includes(event.id));
   const today = dayjs();
   const [checkInDate, checkOutDate] = value as [Date | null, Date | null];
-  const getTileContent = ({ date, view }: CalendarTileProperties) => {
+  const getTileClassName = ({ date, view }: CalendarTileProperties) => {
+    const tileDate = dayjs(date);
     if (view !== "month") {
       return null;
     }
 
-    if (dayjs(date).isBetween(checkInDate, dayjs(checkOutDate), "d", "[]")) {
-      return <BookTile />;
+    if (
+      bookEvents.some((event) =>
+        tileDate.isBetween(event.start, event.end, "d", "[]")
+      )
+    ) {
+      return "booked";
+    }
+
+    if (tileDate.isBetween(checkInDate, checkOutDate, "d", "[]")) {
+      return null;
     }
     return null;
   };
@@ -70,6 +81,16 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
         if (tileDateTime.isBefore(today, "d")) {
           return false;
         }
+
+        // 予約した日にはcheckIn不可
+        if (
+          bookEvents.some((event) =>
+            tileDateTime.isBetween(event.start, event.end)
+          )
+        ) {
+          return false;
+        }
+
         // 予定がある日はcheckIn不可
         return !events.some((event) =>
           dayjs(tileDateTime).isBetween(event.start, event.end, "h", "[]")
@@ -106,7 +127,7 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
       minDate={today.toDate()}
       locale="ja-JP"
       tileDisabled={getTileDisabled}
-      tileContent={getTileContent}
+      tileClassName={getTileClassName}
     />
   );
 };
