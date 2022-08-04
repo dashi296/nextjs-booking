@@ -18,6 +18,8 @@ const handler: NextApiHandler = async (req, res) => {
     return res.status(400);
   }
 
+  res.setHeader("Cache-Control", "s-maxage=300");
+
   const { year, month } = req.query as Query;
   const day = dayjs(new Date(+year, +month, 1)) || dayjs();
 
@@ -44,7 +46,7 @@ const handler: NextApiHandler = async (req, res) => {
     ),
   ]);
 
-  const allEvents = calendarEventsList.reduce((prev, curr) => {
+  const calendarEvents = calendarEventsList.reduce((prev, curr) => {
     if (!prev) {
       return [];
     }
@@ -54,14 +56,11 @@ const handler: NextApiHandler = async (req, res) => {
     return [...prev, ...curr];
   }, [] as calendar_v3.Schema$Event[]);
 
-  if (!allEvents) {
+  if (!calendarEvents) {
     return res.status(400);
   }
 
-  const integratedEvents = allEvents.map((event) => {
-    console.warn("------event start------");
-    console.warn(event);
-    console.warn("------event end--------");
+  const allEvents = calendarEvents.map((event) => {
     const { id, summary, start, end } = event;
     const startDateTime = start?.dateTime
       ? start.dateTime
@@ -81,7 +80,7 @@ const handler: NextApiHandler = async (req, res) => {
     };
   });
 
-  res.status(200).json(integratedEvents);
+  res.status(200).json(allEvents);
 };
 
 export default handler;

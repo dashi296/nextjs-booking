@@ -63,23 +63,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const event = generateEvent({ checkInDate, checkOutDate, description });
 
-  const authorizeResult = await jwt.authorize();
-  if (!authorizeResult.access_token) {
-    res.status(401).json({
-      message: "Authorize Error",
-      error: 401,
-      data,
-    });
-    return;
-  }
-
-  const results = await calendar.events.insert({
+  const result = await calendar.events.insert({
     auth: jwt,
     calendarId: CALENDAR_ID,
     requestBody: event,
   });
 
-  res.status(200).json(results);
+  res.status(200).json(result);
 };
 
 export default handler;
