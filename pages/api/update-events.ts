@@ -3,11 +3,8 @@ import type { NextApiHandler } from "next";
 import { calendar } from "../../libs/google-calendar-api";
 import dayjs from "dayjs";
 import { calendar_v3 } from "googleapis";
-import { getCheckInDateTime, getCheckOutDateTime } from "../../libs/dayjs";
-import { clearEvents, redis, setEventsToRedis } from "../../libs/upstash";
+import { clearEvents, setEventsToRedis } from "../../libs/upstash";
 import { googleEvent2CalendarEvent } from "../../libs/event";
-
-const CALENDAR_ID = process.env.CALENDAR_ID;
 
 // TODO: とりあえず1年分の予定を返す
 
