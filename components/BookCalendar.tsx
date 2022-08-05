@@ -31,7 +31,9 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
     );
   }
 
-  const bookEvents = events.filter((event) => books.includes(event.id));
+  const bookEvents = events.filter(
+    (event) => !!event.id && books.includes(event.id)
+  );
   const today = dayjs();
   const [checkInDate, checkOutDate] = value as [Date | null, Date | null];
   const getTileClassName = ({ date, view }: CalendarTileProperties) => {
