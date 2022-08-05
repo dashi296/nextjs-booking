@@ -9,7 +9,7 @@ import { googleEvent2CalendarEvent } from "../../libs/event";
 // TODO: とりあえず1年分の予定を返す
 
 const handler: NextApiHandler = async (req, res) => {
-  if (req.method !== "GET") {
+  if (req.method !== "POST") {
     return res.status(400);
   }
 
