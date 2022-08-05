@@ -8,8 +8,6 @@ import { DateRange } from "../types/Date";
 import FormSubtitle from "./FormSubtitle";
 import { BooksContext } from "../contexts/Books";
 import { useContext } from "react";
-import { calendar_v3 } from "googleapis";
-import { GaxiosResponse } from "../types/GaxiosResponse";
 
 export type FormInputs = {
   range: DateRange;
@@ -27,6 +25,7 @@ const schema = object({
 
 type Props = {
   range: DateRange;
+  refetchEvents: () => void;
 };
 
 const book = ({
@@ -55,7 +54,7 @@ const book = ({
   );
 };
 
-const BookForm = ({ range }: Props) => {
+const BookForm = ({ range, refetchEvents }: Props) => {
   const { addBook } = useContext(BooksContext);
   const defaultValues = {
     range,
@@ -88,6 +87,7 @@ const BookForm = ({ range }: Props) => {
         if (newBook.id !== undefined) {
           addBook(newBook.id);
         }
+        refetchEvents();
       })
       .catch((error) => {
         console.error(error);

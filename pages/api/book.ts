@@ -2,6 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { jwt, calendar } from "../../libs/google-calendar-api";
 import dayjs from "dayjs";
+import { addEventToRedis } from "../../libs/upstash";
+import { googleEvent2CalendarEvent } from "../../libs/event";
 
 const CALENDAR_ID = process.env.CALENDAR_ID;
 
@@ -69,7 +71,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     requestBody: event,
   });
 
-  console.warn("result: ", result);
+  const bookEvent = googleEvent2CalendarEvent(result.data);
+
+  await addEventToRedis(bookEvent);
 
   res.status(200).json(result);
 };

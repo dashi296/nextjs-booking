@@ -13,23 +13,16 @@ import { DateRange } from "../types/Date";
 import SectionTitle from "./SectionTitle";
 import { getCheckInDateTime, getCheckOutDateTime } from "../libs/dayjs";
 
-const fetcher = ({ year, month }: { year: number; month: number }) => {
-  const params = {
-    year: `${year}`,
-    month: `${month}`,
-  };
-  const query = new URLSearchParams(params);
-  return fetch(`/api/events?${query}`).then((res) => res.json());
+const fetcher = () => {
+  return fetch(`/api/events`).then((res) => res.json());
 };
 
 const BookSection = () => {
   const theme = useTheme();
   const isMdOrOver = useMediaQuery(theme.breakpoints.up("sm"));
   const [range, setRange] = useState<DateRange>([null, null]);
-  const today = dayjs();
-  const { data: events, error } = useSWR(
-    `/api/events?year=${today.year()}&month=${today.month()}`,
-    () => fetcher({ year: today.year(), month: today.month() })
+  const { data: events, mutate: refetchEvents } = useSWR(`/api/events`, () =>
+    fetcher()
   );
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
@@ -75,7 +68,7 @@ const BookSection = () => {
       <Dialog open={openFormDialog} onClose={onCloseFormDialog}>
         <DialogTitle>予約</DialogTitle>
         <DialogContent>
-          <BookForm range={range} />
+          <BookForm range={range} refetchEvents={refetchEvents} />
         </DialogContent>
       </Dialog>
     </Section>
