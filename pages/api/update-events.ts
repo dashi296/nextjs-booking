@@ -38,6 +38,7 @@ const handler: NextApiHandler = async (req, res) => {
           calendarId: calendarId,
           timeMin,
           timeMax,
+          maxResults: 9999,
         })
         .then((res) => res.data.items)
     ),
