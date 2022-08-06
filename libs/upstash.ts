@@ -33,7 +33,8 @@ export const setCalendarsToRedis = async (
   return await redis
     .multi()
     .del("calendars")
-    .set("calendars", JSON.stringify(calendars));
+    .set("calendars", JSON.stringify(calendars))
+    .exec();
 };
 
 export const getCalendarsFromRedis = async () => {
