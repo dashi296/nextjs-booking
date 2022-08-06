@@ -17,7 +17,7 @@ const generateEvent = ({
   description: string;
 }) => {
   return {
-    summary: "予約",
+    summary: "Reserved on Next.js",
     location: "",
     description,
     start: {
@@ -48,8 +48,7 @@ type Query = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
-    res.status(400);
-    return;
+    return res.status(500).json({ error: { statusCode: 500 } });
   }
 
   const data = req.body as Query;

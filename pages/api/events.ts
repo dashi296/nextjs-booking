@@ -4,7 +4,7 @@ import { getEventsFromRedis } from "../../libs/upstash";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "GET") {
-    return res.status(400);
+    return res.status(500).json({ error: { statusCode: 500 } });
   }
 
   const events = await getEventsFromRedis();

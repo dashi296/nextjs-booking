@@ -3,14 +3,18 @@ import type { NextApiHandler } from "next";
 import { calendar } from "../../libs/google-calendar-api";
 import dayjs from "dayjs";
 import { calendar_v3 } from "googleapis";
-import { clearEvents, setEventsToRedis } from "../../libs/upstash";
+import {
+  clearEvents,
+  getCalendarsFromRedis,
+  setEventsToRedis,
+} from "../../libs/upstash";
 import { googleEvent2CalendarEvent } from "../../libs/event";
 
 // TODO: とりあえず1年分の予定を返す
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "POST") {
-    return res.status(400);
+    return res.status(500).json({ error: { statusCode: 500 } });
   }
 
   res.setHeader("Cache-Control", "s-maxage=300");
@@ -20,12 +24,11 @@ const handler: NextApiHandler = async (req, res) => {
   const timeMin = day.startOf("month").toISOString();
   const timeMax = day.add(1, "year").endOf("month").toISOString();
 
-  const calendarIds = await calendar.calendarList
-    .list()
-    .then((res) => res.data.items?.map((item) => item.id));
+  const calendars = await getCalendarsFromRedis();
+  const calendarIds = calendars.map((calendar) => calendar.id);
 
-  if (!calendarIds) {
-    return;
+  if (calendarIds.length === 0) {
+    return res.status(400).json({ message: "Calendars are not registered" });
   }
 
   const calendarEventsList = await Promise.all([
@@ -51,7 +54,9 @@ const handler: NextApiHandler = async (req, res) => {
   }, [] as calendar_v3.Schema$Event[]);
 
   if (!calendarEvents) {
-    return res.status(400);
+    return res
+      .status(400)
+      .json({ error: { message: "There is no event", statusCode: 400 } });
   }
 
   const allEvents = calendarEvents.map(googleEvent2CalendarEvent);
