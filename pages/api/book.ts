@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { jwt, calendar } from "../../libs/google-calendar-api";
-import dayjs from "dayjs";
+import dayjs from "../../libs/dayjs";
 import { addEventToRedis } from "../../libs/upstash";
 import { googleEvent2CalendarEvent } from "../../libs/event";
 
