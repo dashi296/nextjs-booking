@@ -1,3 +1,6 @@
+import { useState, useContext } from "react";
+import { useSnackbar } from "notistack";
+import axios from "../libs/axios";
 import dayjs from "../libs/dayjs";
 import { useForm } from "react-hook-form";
 import { object, string, number, date, array } from "yup";
@@ -7,7 +10,6 @@ import { Box, TextField } from "@mui/material";
 import { DateRange } from "../types/Date";
 import FormSubtitle from "./FormSubtitle";
 import { BooksContext } from "../contexts/Books";
-import { useContext } from "react";
 
 export type FormInputs = {
   range: DateRange;
@@ -26,6 +28,7 @@ const schema = object({
 type Props = {
   range: DateRange;
   refetchEvents: () => void;
+  onClose: () => void;
 };
 
 const book = ({
@@ -39,23 +42,19 @@ const book = ({
   if (!checkInDate || !checkOutDate) {
     return;
   }
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  };
 
-  const body = JSON.stringify({
+  const body = {
     checkInDate: checkInDate.toISOString(),
     checkOutDate: checkOutDate.toISOString(),
     description,
-  });
-  return fetch("/api/book", { method: "POST", headers, body }).then((res) =>
-    res.json()
-  );
+  };
+  return axios.post("/api/book", body);
 };
 
-const BookForm = ({ range, refetchEvents }: Props) => {
+const BookForm = ({ range, refetchEvents, onClose }: Props) => {
   const { addBook } = useContext(BooksContext);
+  const { enqueueSnackbar } = useSnackbar();
+  const [isBooking, setIsBooking] = useState(false);
   const defaultValues = {
     range,
     numOfAdults: 1,
@@ -81,6 +80,7 @@ const BookForm = ({ range, refetchEvents }: Props) => {
     : null;
 
   const submit = handleSubmit(async (data) => {
+    setIsBooking(true);
     await book(data)
       ?.then((res: any) => {
         const newBook = res.data;
@@ -88,10 +88,13 @@ const BookForm = ({ range, refetchEvents }: Props) => {
           addBook(newBook.id);
         }
         refetchEvents();
+        onClose();
+        enqueueSnackbar("予約しました", { variant: "success" });
       })
       .catch((error) => {
         console.error(error);
       });
+    setIsBooking(false);
   });
   return (
     <Box component="form" sx={{ p: 2 }} onSubmit={submit}>
@@ -123,7 +126,10 @@ const BookForm = ({ range, refetchEvents }: Props) => {
         />
       </Box>
       <Box sx={{ pb: 4 }}>
-        <CustomButton type="submit">予約</CustomButton>
+        <CustomButton loading={isBooking} type="submit">
+          予約
+        </CustomButton>
+        <></>
       </Box>
     </Box>
   );

@@ -6,6 +6,7 @@ import useSWR from "swr";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import axios from "../libs/axios";
 
 import BookForm from "./BookForm";
 import Section from "./Section";
@@ -14,7 +15,7 @@ import SectionTitle from "./SectionTitle";
 import { getCheckInDateTime, getCheckOutDateTime } from "../libs/dayjs";
 
 const fetcher = () => {
-  return fetch(`/api/events`).then((res) => res.json());
+  return axios.get(`/api/events`).then((res) => res.data);
 };
 
 const BookSection = () => {
@@ -73,7 +74,11 @@ const BookSection = () => {
       <Dialog open={openFormDialog} onClose={onCloseFormDialog}>
         <DialogTitle>予約</DialogTitle>
         <DialogContent>
-          <BookForm range={range} refetchEvents={refetchEvents} />
+          <BookForm
+            range={range}
+            refetchEvents={refetchEvents}
+            onClose={onCloseFormDialog}
+          />
         </DialogContent>
       </Dialog>
     </Section>

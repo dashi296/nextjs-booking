@@ -6,6 +6,7 @@ import CustomHeader from "../components/common/CustomHeader";
 import CustomFooter from "../components/common/CustomFooter";
 import createEmotionCache from "../mui/createEmotionCache";
 import { BooksProvider } from "../contexts/Books";
+import { SnackbarProvider } from "notistack";
 
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
@@ -16,11 +17,13 @@ function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
     <CacheProvider value={emotionCache}>
-      <BooksProvider>
-        <CustomHeader />
-        <Component {...pageProps} />
-        <CustomFooter />
-      </BooksProvider>
+      <SnackbarProvider maxSnack={3}>
+        <BooksProvider>
+          <CustomHeader />
+          <Component {...pageProps} />
+          <CustomFooter />
+        </BooksProvider>
+      </SnackbarProvider>
     </CacheProvider>
   );
 }

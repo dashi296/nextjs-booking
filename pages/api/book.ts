@@ -74,7 +74,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await addEventToRedis(bookEvent);
 
-  res.status(200).json(result);
+  res.status(200).json(bookEvent);
 };
 
 export default handler;
