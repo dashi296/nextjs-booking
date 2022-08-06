@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
+import dayjs from "../libs/dayjs";
 import BookCalendar from "./BookCalendar";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useState } from "react";
 import useSWR from "swr";
 import Dialog from "@mui/material/Dialog";

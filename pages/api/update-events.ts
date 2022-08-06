@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiHandler } from "next";
 import { calendar } from "../../libs/google-calendar-api";
-import dayjs from "dayjs";
+import dayjs from "../../libs/dayjs";
 import { calendar_v3 } from "googleapis";
 import {
   clearEvents,

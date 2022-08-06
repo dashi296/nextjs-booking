@@ -1,6 +1,6 @@
-import { Box, Skeleton, Tooltip } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs";
-import isBetween from "dayjs/plugin/isBetween";
+import { Box, Skeleton } from "@mui/material";
+import { Dayjs } from "dayjs";
+import dayjs from "../libs/dayjs";
 import { useContext } from "react";
 import Calendar, {
   CalendarProps,
@@ -9,7 +9,6 @@ import Calendar, {
 import { BooksContext } from "../contexts/Books";
 import { getCheckInDateTime, getCheckOutDateTime } from "../libs/dayjs";
 import { CalendarEvent } from "../types/CalendarEvent";
-dayjs.extend(isBetween);
 
 type Props = CalendarProps & {
   events?: CalendarEvent[];

@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from "../libs/dayjs";
 import { useForm } from "react-hook-form";
 import { object, string, number, date, array } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
