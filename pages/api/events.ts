@@ -8,7 +8,6 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const events = await getEventsFromRedis();
-  console.warn(events);
   res.status(200).json(events);
 };
 export default handler;

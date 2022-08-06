@@ -30,7 +30,6 @@ export const BooksProvider = ({ children }: PropsWithChildren) => {
     if (initializedRef.current) {
       return;
     }
-    console.warn("localstorage get");
     const booksFromStorage = JSON.parse(localStorage.getItem("books") || "[]");
     setBooks(booksFromStorage);
     initializedRef.current = true;
@@ -40,7 +39,6 @@ export const BooksProvider = ({ children }: PropsWithChildren) => {
     if (!initializedRef.current) {
       return;
     }
-    console.warn("localstorage set: ", books);
     localStorage.setItem(
       "books",
       `[${books.map((book) => `"${book}"`).join(",")}]`
