@@ -52,6 +52,11 @@ const BookSection = () => {
         selectRange
         showDoubleView={isMdOrOver}
         onChange={(range: [Date] | [Date, Date]) => {
+          // checkInDateと同じ日とタップした時は選択キャンセル
+          if (dayjs(range[0]).isSame(range[1], "d")) {
+            setRange([null, null]);
+            return;
+          }
           const newRange: DateRange =
             range.length === 1
               ? [getCheckInDateTime(range[0]).toDate(), null]

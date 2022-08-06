@@ -91,6 +91,11 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
       };
       return !canCheckIn();
     }
+
+    // チェックイン日と同じ日をタップした時はチェックイン日をキャンセルする挙動にするためdisabledをfalseに
+    if (dayjs(checkInDate).isSame(tileDate, "d")) {
+      return false;
+    }
     const canCheckOut = () => {
       const tileDateTime = getCheckOutDateTime(tileDate);
       // チェックイン以前の日付はチェックアウト不可
