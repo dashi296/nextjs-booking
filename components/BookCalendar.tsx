@@ -84,15 +84,6 @@ const BookCalendar = ({ value, events, ...calendarProps }: Props) => {
           return false;
         }
 
-        // 予約した日にはcheckIn不可
-        if (
-          bookEvents.some((event) =>
-            tileDateTime.isBetween(event.start, event.end)
-          )
-        ) {
-          return false;
-        }
-
         // 予定がある日はcheckIn不可
         return !events.some((event) =>
           dayjs(tileDateTime).isBetween(event.start, event.end, "h", "[]")
