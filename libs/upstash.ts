@@ -14,27 +14,15 @@ export const getEventsFromRedis = async () => {
   return JSON.parse((await redis.get("events")) || "[]");
 };
 
-export const clearEvents = async () => {
-  return await redis.del("events");
-};
-
 export const addEventToRedis = async (event: CalendarEvent) => {
   const prevEvents = await getEventsFromRedis();
-  return await redis
-    .multi()
-    .del("events")
-    .set("events", JSON.stringify([...prevEvents, event]))
-    .exec();
+  return await redis.set("events", JSON.stringify([...prevEvents, event]));
 };
 
 export const setCalendarsToRedis = async (
   calendars: calendar_v3.Schema$CalendarListEntry[]
 ) => {
-  return await redis
-    .multi()
-    .del("calendars")
-    .set("calendars", JSON.stringify(calendars))
-    .exec();
+  return await redis.set("calendars", JSON.stringify(calendars));
 };
 
 export const getCalendarsFromRedis = async () => {

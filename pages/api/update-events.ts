@@ -3,11 +3,7 @@ import type { NextApiHandler } from "next";
 import { calendar } from "../../libs/google-calendar-api";
 import dayjs from "../../libs/dayjs";
 import { calendar_v3 } from "googleapis";
-import {
-  clearEvents,
-  getCalendarsFromRedis,
-  setEventsToRedis,
-} from "../../libs/upstash";
+import { getCalendarsFromRedis, setEventsToRedis } from "../../libs/upstash";
 import { googleEvent2CalendarEvent } from "../../libs/event";
 
 // TODO: とりあえず1年分の予定を返す
@@ -61,7 +57,6 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const allEvents = calendarEvents.map(googleEvent2CalendarEvent);
-  await clearEvents();
   await setEventsToRedis(allEvents);
 
   await res.status(200).json({ status: "ok" });
